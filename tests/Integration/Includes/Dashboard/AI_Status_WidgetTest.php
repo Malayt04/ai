@@ -75,7 +75,7 @@ class Status_Test_Feature_B extends Abstract_Feature {
 /**
  * Additional stub features for threshold tests.
  *
- * @since 1.4.0
+ * @since x.x.x
  */
 class Status_Test_Feature_C extends Status_Test_Feature_A {
 
@@ -90,7 +90,7 @@ class Status_Test_Feature_C extends Status_Test_Feature_A {
 /**
  * Additional stub features for threshold tests.
  *
- * @since 1.4.0
+ * @since x.x.x
  */
 class Status_Test_Feature_D extends Status_Test_Feature_A {
 
@@ -105,7 +105,7 @@ class Status_Test_Feature_D extends Status_Test_Feature_A {
 /**
  * Additional stub features for threshold tests.
  *
- * @since 1.4.0
+ * @since x.x.x
  */
 class Status_Test_Feature_E extends Status_Test_Feature_A {
 
@@ -120,7 +120,7 @@ class Status_Test_Feature_E extends Status_Test_Feature_A {
 /**
  * Additional stub features for threshold tests.
  *
- * @since 1.4.0
+ * @since x.x.x
  */
 class Status_Test_Feature_F extends Status_Test_Feature_A {
 
@@ -129,6 +129,118 @@ class Status_Test_Feature_F extends Status_Test_Feature_A {
 	 */
 	public static function get_id(): string {
 		return 'test-feature-f';
+	}
+}
+
+/**
+ * Stable stub feature A for the Features column.
+ *
+ * @since x.x.x
+ */
+class Status_Test_Stable_Feature_A extends Status_Test_Feature_A {
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public static function get_id(): string {
+		return 'test-stable-feature-a';
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	protected function load_metadata(): array {
+		return array(
+			'label'       => 'Stable Feature A',
+			'description' => 'A stable test feature',
+			'stability'   => 'stable',
+		);
+	}
+}
+
+/**
+ * Stable stub feature B for the Features column.
+ *
+ * @since x.x.x
+ */
+class Status_Test_Stable_Feature_B extends Status_Test_Feature_A {
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public static function get_id(): string {
+		return 'test-stable-feature-b';
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	protected function load_metadata(): array {
+		return array(
+			'label'       => 'Stable Feature B',
+			'description' => 'Another stable test feature',
+			'stability'   => 'stable',
+		);
+	}
+}
+
+/**
+ * Additional stable stub features for threshold tests.
+ *
+ * @since x.x.x
+ */
+class Status_Test_Stable_Feature_C extends Status_Test_Stable_Feature_A {
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public static function get_id(): string {
+		return 'test-stable-feature-c';
+	}
+}
+
+/**
+ * Additional stable stub features for threshold tests.
+ *
+ * @since x.x.x
+ */
+class Status_Test_Stable_Feature_D extends Status_Test_Stable_Feature_A {
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public static function get_id(): string {
+		return 'test-stable-feature-d';
+	}
+}
+
+/**
+ * Additional stable stub features for threshold tests.
+ *
+ * @since x.x.x
+ */
+class Status_Test_Stable_Feature_E extends Status_Test_Stable_Feature_A {
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public static function get_id(): string {
+		return 'test-stable-feature-e';
+	}
+}
+
+/**
+ * Additional stable stub features for threshold tests.
+ *
+ * @since x.x.x
+ */
+class Status_Test_Stable_Feature_F extends Status_Test_Stable_Feature_A {
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public static function get_id(): string {
+		return 'test-stable-feature-f';
 	}
 }
 
@@ -152,6 +264,12 @@ class AI_Status_WidgetTest extends WP_UnitTestCase {
 		delete_option( 'wpai_feature_test-feature-d_enabled' );
 		delete_option( 'wpai_feature_test-feature-e_enabled' );
 		delete_option( 'wpai_feature_test-feature-f_enabled' );
+		delete_option( 'wpai_feature_test-stable-feature-a_enabled' );
+		delete_option( 'wpai_feature_test-stable-feature-b_enabled' );
+		delete_option( 'wpai_feature_test-stable-feature-c_enabled' );
+		delete_option( 'wpai_feature_test-stable-feature-d_enabled' );
+		delete_option( 'wpai_feature_test-stable-feature-e_enabled' );
+		delete_option( 'wpai_feature_test-stable-feature-f_enabled' );
 		remove_all_filters( 'wpai_feature_test-feature-a_enabled' );
 		remove_all_filters( 'wpai_has_ai_credentials' );
 		parent::tearDown();
@@ -382,10 +500,12 @@ class AI_Status_WidgetTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Renders status mode with a configurable set of test experiments.
+	 * Renders status mode with a configurable set of test features.
 	 *
-	 * @param array<\WordPress\AI\Contracts\Feature> $features       Test experiments to register.
-	 * @param string[]                                      $enabled_ids IDs of enabled test experiments.
+	 * @since x.x.x
+	 *
+	 * @param array<\WordPress\AI\Contracts\Feature> $features    Test features to register.
+	 * @param string[]                               $enabled_ids IDs of enabled test features.
 	 * @return string The rendered widget output.
 	 */
 	private function render_status_view_with_features( array $features, array $enabled_ids ): string {
@@ -406,7 +526,31 @@ class AI_Status_WidgetTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Extracts the Features column from rendered widget markup.
+	 *
+	 * @since x.x.x
+	 *
+	 * @param string $output Rendered widget markup.
+	 * @return string Features column markup.
+	 */
+	private function get_features_section( string $output ): string {
+		$start = strpos( $output, 'Features' );
+		if ( false === $start ) {
+			return '';
+		}
+
+		$end = strpos( $output, 'Experiments' );
+		if ( false !== $end && $end > $start ) {
+			return substr( $output, (int) $start, $end - $start );
+		}
+
+		return substr( $output, (int) $start );
+	}
+
+	/**
 	 * Extracts the Experiments column from rendered widget markup.
+	 *
+	 * @since x.x.x
 	 *
 	 * @param string $output Rendered widget markup.
 	 * @return string Experiments column markup.
@@ -416,9 +560,66 @@ class AI_Status_WidgetTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Tests that the Features column uses the shared summarization logic.
+	 *
+	 * @since x.x.x
+	 */
+	public function test_status_view_summarizes_stable_features() {
+		add_filter( 'wpai_has_ai_credentials', '__return_true' );
+
+		update_option( 'wpai_feature_test-stable-feature-a_enabled', true );
+		update_option( 'wpai_feature_test-stable-feature-b_enabled', false );
+
+		$registry = new Registry();
+		$registry->register_feature( new Status_Test_Stable_Feature_A() );
+		$registry->register_feature( new Status_Test_Stable_Feature_B() );
+
+		$widget = new AI_Status_Widget( $registry );
+
+		ob_start();
+		$widget->render();
+		$output = ob_get_clean();
+
+		$features_section = $this->get_features_section( $output );
+
+		$this->assertStringContainsString( 'Stable Feature A', $features_section );
+		$this->assertStringContainsString( '1 feature not enabled', $features_section );
+	}
+
+	/**
+	 * Tests that more than five enabled Features are summarized.
+	 *
+	 * @since x.x.x
+	 */
+	public function test_status_view_summarizes_more_than_five_enabled_features() {
+		$output           = $this->render_status_view_with_features(
+			array(
+				new Status_Test_Stable_Feature_A(),
+				new Status_Test_Stable_Feature_B(),
+				new Status_Test_Stable_Feature_C(),
+				new Status_Test_Stable_Feature_D(),
+				new Status_Test_Stable_Feature_E(),
+				new Status_Test_Stable_Feature_F(),
+			),
+			array(
+				'test-stable-feature-a',
+				'test-stable-feature-b',
+				'test-stable-feature-c',
+				'test-stable-feature-d',
+				'test-stable-feature-e',
+				'test-stable-feature-f',
+			)
+		);
+		$features_section = $this->get_features_section( $output );
+
+		$this->assertStringContainsString( '6 features enabled', $features_section );
+		$this->assertSame( 1, substr_count( $features_section, 'dashicons-yes-alt' ) );
+	}
+
+	/**
 	 * Tests that five enabled experiments are still listed individually.
 	 *
-	 * @since 1.4.0
+	 * @since x.x.x
 	 */
 	public function test_status_view_lists_five_enabled_experiments_individually() {
 		$output              = $this->render_status_view_with_features(
@@ -446,7 +647,7 @@ class AI_Status_WidgetTest extends WP_UnitTestCase {
 	/**
 	 * Tests that more than five enabled experiments are summarized.
 	 *
-	 * @since 1.4.0
+	 * @since x.x.x
 	 */
 	public function test_status_view_summarizes_more_than_five_enabled_experiments() {
 		$output              = $this->render_status_view_with_features(
@@ -476,7 +677,7 @@ class AI_Status_WidgetTest extends WP_UnitTestCase {
 	/**
 	 * Tests that multiple disabled experiments use the plural summary.
 	 *
-	 * @since 1.4.0
+	 * @since x.x.x
 	 */
 	public function test_status_view_summarizes_multiple_disabled_experiments() {
 		$output              = $this->render_status_view_with_features(
